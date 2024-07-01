@@ -1,12 +1,15 @@
+# Татьяна Дробина, 18-я когорта — Финальный проект. Инженер по тестированию плюс
 import sender_stand_request
+import data
 
-
-# Функция для позитивной проверки
-def positive_assert():
-    # В переменную order_response сохраняется результат запроса на получение заказа по трек-номеру
-    order_response = sender_stand_request.get_order_on_number()
-    assert order_response.status_code == 200
-
-
-def test_order_on_number_get_response_200():
-    positive_assert()
+# Автотест
+def test_order_creation_and_retrieval():
+    response = sender_stand_request.create_order(data.order_body)
+    track_number = response.json()["track"]
+    print("Заказ создан. Номер трека:", track_number)
+    order_response = sender_stand_request.get_order(track_number)
+    assert order_response.status_code == 200, f"Ошибка: {order_response.status_code}"
+    order_data = order_response.json()
+    print("Данные заказа")
+    print(order_data)
+    print(order_response)
